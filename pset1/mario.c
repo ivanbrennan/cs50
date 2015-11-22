@@ -4,6 +4,7 @@ int main(void)
 {
 	int ht, i, j;
 
+	// get height
 	do
 	{
 		printf("height: ");
@@ -11,19 +12,22 @@ int main(void)
 	}
 	while (ht < 1 || ht > 23);
 
-	for (i = ht; i > 0; i--)
+	// print pyramid
+	for (i = 0; i < ht; i++)
 	{
-		for (j = 0; j < (ht+1); j++)
+		// print spaces
+		for (j = 0; j < (ht - i - 1); j++)
 		{
-			if (j < (i-1))
-			{
-				printf(" ");
-			}
-			else
-			{
-				printf("#");
-			}
+			printf(" ");
 		}
+		// print hashes
+		for (j = 0; j < (i+2); j++)
+		{
+			printf("#");
+		}
+		// print newline
 		printf("\n");
 	}
+
+	return 0;
 }
