@@ -2,26 +2,26 @@
 
 int main(void)
 {
-	int ht, i, j;
+	int n, j, k;
 
 	// get height
 	do
 	{
 		printf("height: ");
-		scanf(" %d", &ht);
+		scanf(" %d", &n);
 	}
-	while (ht < 1 || ht > 23);
+	while (n < 1 || n > 23);
 
 	// print pyramid
-	for (i = 0; i < ht; i++)
+	for (j = 0; j < n; j++)
 	{
 		// print spaces
-		for (j = 0; j < (ht - i - 1); j++)
+		for (k = 0; k < ((n-1) - j); k++)
 		{
 			printf(" ");
 		}
 		// print hashes
-		for (j = 0; j < (i+2); j++)
+		for (k = ((n-1) - j); k <= n; k++)
 		{
 			printf("#");
 		}
