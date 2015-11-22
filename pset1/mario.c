@@ -2,30 +2,37 @@
 
 int main(void)
 {
-	int n, j, k;
+	int ht, row, spaces, hashes;
 
 	// get height
 	do
 	{
 		printf("height: ");
-		scanf(" %d", &n);
+		scanf(" %d", &ht);
 	}
-	while (n < 1 || n > 23);
+	while (ht < 1 || ht > 23);
 
 	// print pyramid
-	for (j = 0; j < n; j++)
+	for (row = 0; row < ht; row++)
 	{
-		// print spaces
-		for (k = 0; k < ((n-1) - j); k++)
-		{
+		/* left-padding shrinks from (ht-1) to 0,
+		 * while hashes grow from 2 to (ht+1).
+		 *
+		 *		...##
+		 *		..###
+		 *		.####
+		 *		#####
+		 *
+		*/
+		spaces = (ht-1) - row;
+		hashes = (ht+1) - spaces;
+
+		while (spaces--) {
 			printf(" ");
 		}
-		// print hashes
-		for (k = ((n-1) - j); k <= n; k++)
-		{
+		while (hashes--) {
 			printf("#");
 		}
-		// print newline
 		printf("\n");
 	}
 
