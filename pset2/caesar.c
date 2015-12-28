@@ -1,9 +1,7 @@
-// origin = (int) 'A';
-// offset = (int) letter;
-// cipher_int = ((offset - origin + k) % 26) + origin
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_TEXT_LENGTH	1000
 
@@ -17,17 +15,12 @@ char rotate_char(char c, int rotation, char alpha_origin)
 
 char caesar_cipher_char(char plain_char, int key)
 {
-	char cipher_char;
-
-	if ('A' <= plain_char && plain_char <= 'Z') {
-		cipher_char = rotate_char(plain_char, key, 'A');
-	} else if ('a' <= plain_char && plain_char <= 'z') {
-		cipher_char = rotate_char(plain_char, key, 'a');
+	if (isalpha(plain_char)) {
+		char alpha_origin = isupper(plain_char) ? 'A' : 'a';
+		return rotate_char(plain_char, key, alpha_origin);
 	} else {
-		cipher_char = plain_char;
+		return plain_char;
 	}
-
-	return cipher_char;
 }
 
 int main(int argc, char* argv[])
@@ -36,12 +29,11 @@ int main(int argc, char* argv[])
 		printf("You must specify an integer key!\n");
 		return 1;
 	} else {
-		int key = atoi(argv[1]);
-		printf("What would you like to encrypt?\n");
-
 		char plaintext[MAX_TEXT_LENGTH] = { '\0' };
+		printf("What would you like to encrypt?\n");
 		gets(plaintext);
 
+		int key = atoi(argv[1]);
 		for (int i = 0, n = strlen(plaintext); i < n; i++) {
 			printf("%c", caesar_cipher_char(plaintext[i], key));
 		}
