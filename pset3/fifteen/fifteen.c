@@ -28,6 +28,7 @@
 
 // board
 int board[DIM_MAX][DIM_MAX];
+int index[DIM_MAX * DIM_MAX];
 
 // dimensions
 int d;
@@ -36,7 +37,10 @@ int d;
 void clear(void);
 void greet(void);
 void init(void);
+int  initTileVal(int row, int col);
+int  oneOrTwo(int col);
 void draw(void);
+void printTile(int tileVal);
 bool move(int tile);
 bool won(void);
 
@@ -159,7 +163,30 @@ void greet(void)
  */
 void init(void)
 {
-    // TODO
+	for (int i = 0; i < d; i++) {
+		for (int j = 0; j < d; j++) {
+			int tile = initTileVal(i, j);
+
+			board[i][j] = tile;
+			index[tile] = i*d + j;
+		}
+	}
+}
+
+int initTileVal(int row, int col)
+{
+	if (row < d-1 || col < d-3) {
+		return (d-row) * d - (col+1);
+	} else if (col < d-1) {
+		return oneOrTwo(col);
+	} else {
+		return 0;
+	}
+}
+
+int oneOrTwo(int col)
+{
+	return (d-3 + col + d%2)%2 + 1;
 }
 
 /**
@@ -167,7 +194,21 @@ void init(void)
  */
 void draw(void)
 {
-    // TODO
+	for (int i = 0; i < d; i++) {
+		for (int j = 0; j < d; j++) {
+			printTile(board[i][j]);
+		}
+		printf("\n\n");
+	}
+}
+
+void printTile(int tileVal)
+{
+	if (tileVal) {
+		printf("%4i", tileVal);
+	} else {
+		printf("%4c", '_');
+	}
 }
 
 /**
@@ -176,8 +217,33 @@ void draw(void)
  */
 bool move(int tile)
 {
-    // TODO
-    return false;
+	if (tile < 0 || tile >= d*d) {
+		return false;
+	}
+
+	int tileRow = index[tile] / d;
+	int tileCol = index[tile] % d;
+
+	int emptyRow = index[0] / d;
+	int emptyCol = index[0] % d;
+
+	int dist = (tileRow - emptyRow) + (tileCol - emptyCol);
+	if (dist < 0) {
+		dist *= -1;
+	}
+
+	if (dist <= 1) {
+		board[emptyRow][emptyCol] = tile;
+		board[tileRow][tileCol] = 0;
+
+		int temp = index[0];
+		index[0] = index[tile];
+		index[tile] = temp;
+
+		return true;
+	} else {
+		return false;
+	}
 }
 
 /**
@@ -186,6 +252,11 @@ bool move(int tile)
  */
 bool won(void)
 {
-    // TODO
-    return false;
+	for (int i = 1; i < d*d; i++) {
+		if (index[i] != i-1) {
+			return false;
+		}
+	}
+
+	return true;
 }
