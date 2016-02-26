@@ -38,10 +38,12 @@ void clear(void);
 void greet(void);
 void init(void);
 int  initTileVal(int row, int col);
+int countDownFromMax(int row, int col);
 int  oneOrTwo(int col);
 void draw(void);
 void printTile(int tileVal);
 bool move(int tile);
+bool legalMove(int fromRow, int fromCol, int toRow, int toCol);
 bool won(void);
 
 int main(int argc, string argv[])
@@ -163,8 +165,10 @@ void greet(void)
  */
 void init(void)
 {
-	for (int i = 0; i < d; i++) {
-		for (int j = 0; j < d; j++) {
+	for (int i = 0; i < d; i++)
+	{
+		for (int j = 0; j < d; j++)
+		{
 			int tile = initTileVal(i, j);
 
 			board[i][j] = tile;
@@ -175,18 +179,31 @@ void init(void)
 
 int initTileVal(int row, int col)
 {
-	if (row < d-1 || col < d-3) {
-		return (d-row) * d - (col+1);
-	} else if (col < d-1) {
+	if (row < d-1 || col < d-3)
+	{
+		return countDownFromMax(row, col);
+	}
+	else if (col < d-1)
+	{
 		return oneOrTwo(col);
-	} else {
+	}
+	else
+	{
 		return 0;
 	}
 }
 
+int countDownFromMax(int row, int col)
+{
+	int maximumValue   = d*d - 1;
+	int prevTilesCount = d*row + col;
+
+	return maximumValue - prevTilesCount;
+}
+
 int oneOrTwo(int col)
 {
-	return (d-3 + col + d%2)%2 + 1;
+	return (d-3 + col + d % 2) % 2 + 1;
 }
 
 /**
@@ -194,8 +211,10 @@ int oneOrTwo(int col)
  */
 void draw(void)
 {
-	for (int i = 0; i < d; i++) {
-		for (int j = 0; j < d; j++) {
+	for (int i = 0; i < d; i++)
+	{
+		for (int j = 0; j < d; j++)
+		{
 			printTile(board[i][j]);
 		}
 		printf("\n\n");
@@ -204,9 +223,12 @@ void draw(void)
 
 void printTile(int tileVal)
 {
-	if (tileVal) {
+	if (tileVal)
+	{
 		printf("%4i", tileVal);
-	} else {
+	}
+	else
+	{
 		printf("%4c", '_');
 	}
 }
@@ -217,33 +239,40 @@ void printTile(int tileVal)
  */
 bool move(int tile)
 {
-	if (tile < 0 || tile >= d*d) {
+	if (tile < 0 || tile >= d*d)
+	{
 		return false;
 	}
 
-	int tileRow = index[tile] / d;
-	int tileCol = index[tile] % d;
+	int tileIndex = index[tile];
+	int tileRow = tileIndex / d;
+	int tileCol = tileIndex % d;
 
-	int emptyRow = index[0] / d;
-	int emptyCol = index[0] % d;
+	int emptyIndex = index[0];
+	int emptyRow = emptyIndex / d;
+	int emptyCol = emptyIndex % d;
 
-	int dist = (tileRow - emptyRow) + (tileCol - emptyCol);
-	if (dist < 0) {
-		dist *= -1;
-	}
-
-	if (dist <= 1) {
-		board[emptyRow][emptyCol] = tile;
+	if (legalMove(tileRow, tileCol, emptyRow, emptyCol))
+	{
 		board[tileRow][tileCol] = 0;
+		index[0] = tileIndex;
 
-		int temp = index[0];
-		index[0] = index[tile];
-		index[tile] = temp;
+		board[emptyRow][emptyCol] = tile;
+		index[tile] = emptyIndex;
 
 		return true;
-	} else {
+	}
+	else
+	{
 		return false;
 	}
+}
+
+bool legalMove(int fromRow, int fromCol, int toRow, int toCol)
+{
+	int dist = (fromRow - toRow) + (fromCol - toCol);
+
+	return (dist == 1 || dist == -1);
 }
 
 /**
@@ -252,8 +281,10 @@ bool move(int tile)
  */
 bool won(void)
 {
-	for (int i = 1; i < d*d; i++) {
-		if (index[i] != i-1) {
+	for (int i = 1; i < d*d; i++)
+	{
+		if (index[i] != i-1)
+		{
 			return false;
 		}
 	}
