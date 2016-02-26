@@ -14,7 +14,7 @@
  * Note that usleep is obsolete, but it offers more granularity than
  * sleep and is simpler to use than nanosleep; `man usleep` for more.
  */
- 
+
 #define _XOPEN_SOURCE 500
 
 #include <cs50.h>
@@ -109,7 +109,7 @@ int main(int argc, string argv[])
         // prompt for move
         printf("Tile to move: ");
         int tile = GetInt();
-        
+
         // quit if user inputs 0 (for testing)
         if (tile == 0)
         {
@@ -130,7 +130,7 @@ int main(int argc, string argv[])
         // sleep thread for animation's sake
         usleep(500000);
     }
-    
+
     // close log
     fclose(file);
 
@@ -159,7 +159,7 @@ void greet(void)
 
 /**
  * Initializes the game's board with tiles numbered 1 through d*d - 1
- * (i.e., fills 2D array with values but does not actually print them).  
+ * (i.e., fills 2D array with values but does not actually print them).
  */
 void init(void)
 {
@@ -213,7 +213,7 @@ void printTile(int tileVal)
 
 /**
  * If tile borders empty space, moves tile and returns true, else
- * returns false. 
+ * returns false.
  */
 bool move(int tile)
 {
@@ -247,7 +247,7 @@ bool move(int tile)
 }
 
 /**
- * Returns true if game is won (i.e., board is in winning configuration), 
+ * Returns true if game is won (i.e., board is in winning configuration),
  * else false.
  */
 bool won(void)
