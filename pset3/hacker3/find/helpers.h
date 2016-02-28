@@ -9,9 +9,6 @@
  
 #include <cs50.h>
 
-// constant
-#define LIMIT 65536
-
 /**
  * Returns true if value is in array of n values, else false.
  */

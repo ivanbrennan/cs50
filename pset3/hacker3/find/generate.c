@@ -18,7 +18,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "helpers.h"
+
+// constant
+#define LIMIT 65536
 
 int main(int argc, string argv[])
 {
