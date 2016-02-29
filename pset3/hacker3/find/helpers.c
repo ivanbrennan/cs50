@@ -8,7 +8,6 @@
  */
        
 #include <cs50.h>
-#include <math.h>
 
 #include "helpers.h"
 
@@ -108,45 +107,50 @@ void sortyByPosition(int values[], int n, unsigned int positions[], int position
 
 void radixSortLSB(int values[], int n)
 {
+	// build buckets to hold grouped numbers
 	int buckets[RADIX][n];
-
-	for (int i = 0; i < RADIX; i++)
+	for (int group = 0; group < RADIX; group++)
 	{
-		clearAry(buckets[i], n);
+		for (int entry = 0; entry < n; entry++)
+		{
+			buckets[group][entry] = -1;
+		}
 	}
 
+	// find max unit (place-value)
 	int maxVal = maxValue(values, n);
-	int maxPow = (int) log10(maxVal);
-
-	for (int i = 0; i <= maxPow; i++)
+	int maxUnit = 1;
+	while (maxUnit * RADIX <= maxVal)
 	{
-		for (int j = 0; j < n; j++)
-		{
-			int index = (values[j] / ((int) pow(RADIX, i))) % RADIX;
-			int k = 0;
-			while (buckets[index][k] != -1)
-			{
-				k++;
-			}
-			buckets[index][k] = values[j];
-		}
-
-		int v = 0;
-		for (int j = 0; j < RADIX; j++)
-		{
-			for (int k = 0; k < n && buckets[j][k] != -1; k++)
-			{
-				values[v++] = buckets[j][k];
-				buckets[j][k] = -1;
-			}
-		}
+		maxUnit *= RADIX;
 	}
-}
 
-void clearAry(int ary[], int n)
-{
-	for (int i = 0; i < n; i++)
+	// iterate from least to most significant unit
+	for (int unit = 1; unit <= maxUnit; unit *= RADIX)
 	{
-		ary[i] = -1;
+		// group numbers by digit
+		for (int v = 0; v < n; v++)
+		{
+			int value = values[v];
+			int group = (value / unit) % RADIX;
+			int entry = 0;
+			while (buckets[group][entry] != -1)
+			{
+				entry++;
+			}
+			buckets[group][entry] = value;
+		}
+
+		// write numbers to original array
+		int v = 0;
+		for (int group = 0; group < RADIX; group++)
+		{
+			for (int entry = 0; entry < n && buckets[group][entry] != -1; entry++)
+			{
+				values[v++] = buckets[group][entry];
+				// clear bucket entries as we go
+				buckets[group][entry] = -1;
+			}
+		}
 	}
 }
