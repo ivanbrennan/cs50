@@ -13,6 +13,7 @@
 
 #define RADIX 10
 
+bool binarySearch(int value, int array[], int iMin, int iMax);
 void countingSort(int values[], int n);
 int maxValue(int values[], int n);
 void zeroOut(unsigned int positions[], int positions_len);
@@ -28,28 +29,39 @@ bool search(int value, int array[], int n)
 	if (n > 0)
 	{
 		int iMin = 0;
-		int iMid = n / 2;
 		int iMax = n - 1;
 
-		while (iMin <= iMax)
+		return binarySearch(value, array, iMin, iMax);
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool binarySearch(int value, int array[], int iMin, int iMax)
+{
+	if (iMin <= iMax)
+	{
+		int iMid = (iMin + iMax) / 2;
+
+		if (value == array[iMid])
 		{
-			if (value == array[iMid])
-			{
-				return true;
-			}
-			else if (value > array[iMid])
-			{
-				iMin = iMid + 1;
-			}
-			else
-			{
-				iMax = iMid - 1;
-			}
-			iMid = (iMin + iMax) / 2;
+			return true;
+		}
+		else if (value > array[iMid])
+		{
+			return binarySearch(value, array, iMid+1, iMax);
+		}
+		else
+		{
+			return binarySearch(value, array, iMin, iMid-1);
 		}
 	}
-
-    return false;
+	else
+	{
+		return false;
+	}
 }
 
 /**
