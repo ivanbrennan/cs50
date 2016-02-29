@@ -19,7 +19,6 @@ void zeroOut(unsigned int positions[], int positions_len);
 void buildHistogram(int values[], int n, unsigned int positions[]);
 void sortyByPosition(int values[], int n, unsigned int positions[], int positions_len);
 void radixSortLSB(int values[], int n);
-void clearAry(int ary[], int n);
 
 /**
  * Returns true if value is in array of n values, else false.
@@ -45,7 +44,7 @@ bool search(int value, int array[], int n)
  */
 void sort(int values[], int n)
 {
-	radixSortLSB(values, n);
+	countingSort(values, n);
 }
 
 void countingSort(int values[], int n)
@@ -105,6 +104,7 @@ void sortyByPosition(int values[], int n, unsigned int positions[], int position
 	}
 }
 
+// this was an interesting challenge, but is significantly slower than countingSort
 void radixSortLSB(int values[], int n)
 {
 	// build buckets to hold grouped numbers
