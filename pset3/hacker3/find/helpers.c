@@ -27,12 +27,25 @@ bool search(int value, int array[], int n)
 {
 	if (n > 0)
 	{
-		for (int i = 0; i < n; i++)
+		int iMin = 0;
+		int iMid = n / 2;
+		int iMax = n - 1;
+
+		while (iMin <= iMax)
 		{
-			if (array[i] == value)
+			if (value == array[iMid])
 			{
 				return true;
 			}
+			else if (value > array[iMid])
+			{
+				iMin = iMid + 1;
+			}
+			else
+			{
+				iMax = iMid - 1;
+			}
+			iMid = (iMin + iMax) / 2;
 		}
 	}
 
